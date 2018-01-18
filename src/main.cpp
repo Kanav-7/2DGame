@@ -12,8 +12,8 @@ GLFWwindow *window;
 * Customizable functions *
 **************************/
 
-Ball  ball1,ball2;
-
+Ball  ball[100000];
+int num = 10;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 
 Timer t60(1.0 / 60);
@@ -50,8 +50,8 @@ void draw() {
     glm::mat4 MVP;  // MVP = Projection * View * Model
 
     // Scene render
-    ball1.draw(VP);
-    ball2.draw(VP);
+    for(int i=0;i<num;i++)
+        ball[i].draw(VP);
 }
 
 void tick_input(GLFWwindow *window) {
@@ -63,11 +63,16 @@ void tick_input(GLFWwindow *window) {
 }
 
 void tick_elements() {
-    ball1.tick();
-    ball2.tick();
-    if (detect_collision(ball1.bounding_box(), ball2.bounding_box())) {
-        ball1.speed = -ball1.speed;
-        ball2.speed = -ball2.speed;
+    for(int i=0;i<num;i++){
+        ball[i].tick();
+        for(int j=i+1;j<num;j++)
+        {
+            if (i!=j && detect_collision(ball[i].bounding_box(), ball[j].bounding_box())) {
+                ball[i].speed = -ball[i].speed;
+                ball[j].speed = -ball[j].speed;
+         }
+    }
+
     }
 }
 
@@ -77,9 +82,8 @@ void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
     // Create the models
 
-    ball1       = Ball(1, 0, 0.5,COLOR_RED);
-    ball2       = Ball(-1, 0,0.7, COLOR_RED);
-    ball2.speed = -ball2.speed;
+    for(int i=0;i<num;i++)
+        ball[i] = Ball(rand()%5 - 2,rand()%5 - 2,0.5,(rand()%4 - 2)*0.01 + 0.01 , COLOR_RED);
 
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");

@@ -70,6 +70,13 @@ struct bounding_box_t {
     float r;
 };
 
+struct bounding_box_r {
+    float x;
+    float y;
+    float l;
+    float w;
+};
+
 bool detect_collision(bounding_box_t a, bounding_box_t b);
 
 extern float screen_zoom, screen_center_x, screen_center_y;
