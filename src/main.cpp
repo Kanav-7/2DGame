@@ -1,6 +1,7 @@
 #include "main.h"
 #include "timer.h"
 #include "ball.h"
+#include "rectangle.h"
 
 using namespace std;
 
@@ -13,13 +14,30 @@ GLFWwindow *window;
 **************************/
 
 Ball  ball[100000];
-int num = 10;
+Ball player;
+int player_state = 0;
+double acc = 0.002, upspeed = -0.15f;
+float ball_rad_start = 0.2f, ball_rad_end = 0.6f;
+float ball_var_start = 1.0f, ball_var_end = 4.5f;
+float ball_x_start = -5.7f, ball_x_end = -5.0f;
+float ball_vel_start = 0.01f, ball_vel_end = 0.05f;
+float player_radius = 0.7f,player_x = -4.0f, player_y = -0.8f;
+
+float vel = 0.05;
+Rectangle flore;
+int num = 8;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 
 Timer t60(1.0 / 60);
 
 /* Render the scene with openGL */
 /* Edit this function according to your assignment */
+
+float random(float a,float b)
+{
+   return (a + (((float) rand()) / (float) RAND_MAX)*(b-a));
+}
+
 void draw() {
     // clear the color and depth in the frame buffer
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -52,39 +70,84 @@ void draw() {
     // Scene render
     for(int i=0;i<num;i++)
         ball[i].draw(VP);
+
+    flore.draw(VP);
+    player.draw(VP);
 }
 
 void tick_input(GLFWwindow *window) {
     int left  = glfwGetKey(window, GLFW_KEY_LEFT);
     int right = glfwGetKey(window, GLFW_KEY_RIGHT);
-    if (left) {
-        // Do something
+    int up = glfwGetKey(window, GLFW_KEY_UP);
+//    int down = glfwGetKey(window, GLFW_KEY_DOWN);
+
+    if (right && player.position.x < 5 - player_radius) {
+        player.move(vel,0);
     }
+    if (left && player.position.x > player_radius - 5) {
+        player.move(-vel,0);
+    }
+    if (up  && player.position.y < 5 && player_state == 0) {
+        player_state = 1;
+        player.set_speed(0,upspeed);
+    }
+//    if (down && player.position.y > -0.8) {
+//        player.move(0,-vel);
+//    }
 }
 
-void tick_elements() {
-    for(int i=0;i<num;i++){
-        ball[i].tick();
-        for(int j=i+1;j<num;j++)
+void tick_elements()
+{
+    player.tick();
+
+    if(detect_collision_floor(player.bounding_box(),flore.bounding_box()))
+    {
+        player.set_position(player.position.x,player_y);
+        player.speedy = 0;
+        player_state = 0;
+    }
+    if(player_state == 1)
+    {
+        player.set_speed(0,player.speedy+ acc);
+    }
+
+    for(int i=0;i<num;i++)
+    {
+        if(player.speedy > 0 && detect_collision(player.bounding_box(),ball[i].bounding_box()))
         {
-            if (i!=j && detect_collision(ball[i].bounding_box(), ball[j].bounding_box())) {
-                ball[i].speed = -ball[i].speed;
-                ball[j].speed = -ball[j].speed;
-         }
+             player.set_speed(-player.speedx,-player.speedy + 0.005f);
+             player.tick();
+
+             ball[i].set_position(random(ball_x_start,ball_x_end),random(ball_var_start,ball_var_end));
+             ball[i].set_speed(-random(ball_vel_start,ball_vel_end),0);
+             ball[i].set_radius(random(ball_rad_start,ball_rad_end));
+        }
+        ball[i].tick();
+        if(ball[i].position.x > 5.1 + player_radius )
+        {
+            ball[i].set_position(random(ball_x_start,ball_x_end),random(ball_var_start,ball_var_end));
+            ball[i].set_speed(-random(ball_vel_start,ball_vel_end),0);
+            ball[i].set_radius(random(ball_rad_start,ball_rad_end));
+        }
     }
 
     }
-}
 
 /* Initialize the OpenGL rendering properties */
 /* Add all the models to be created here */
 void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
     // Create the models
-
+    player = Ball(player_x,player_y,player_radius,0,0,COLOR_GREEN);
+    flore = Rectangle(0,-3,COLOR_BLACK);
     for(int i=0;i<num;i++)
-        ball[i] = Ball(rand()%5 - 2,rand()%5 - 2,0.5,(rand()%4 - 2)*0.01 + 0.01 , COLOR_RED);
-
+    {
+        float vary = random(ball_var_start,ball_var_end);
+        float vely = random(ball_vel_start,ball_vel_end);
+        float rady = random(ball_rad_start,ball_rad_end);
+        float xy = random(ball_x_start,ball_x_end);
+        ball[i] = Ball(xy,vary,rady, -vely ,0, COLOR_RED);
+    }
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");
     // Get a handle for our "MVP" uniform
@@ -147,10 +210,15 @@ bool detect_collision(bounding_box_t a, bounding_box_t b) {
     return false;
 }
 
+bool detect_collision_floor(bounding_box_t a,bounding_box_r b)
+{
+    return (a.y - a.r < b.y/2);
+}
+
 void reset_screen() {
-    float top    = screen_center_y + 4 / screen_zoom;
-    float bottom = screen_center_y - 4 / screen_zoom;
-    float left   = screen_center_x - 4 / screen_zoom;
-    float right  = screen_center_x + 4 / screen_zoom;
+    float top    = screen_center_y + 5 / screen_zoom;
+    float bottom = screen_center_y - 5 / screen_zoom;
+    float left   = screen_center_x - 5 / screen_zoom;
+    float right  = screen_center_x + 5 / screen_zoom;
     Matrices.projection = glm::ortho(left, right, bottom, top, 0.1f, 500.0f);
 }

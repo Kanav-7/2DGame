@@ -1,11 +1,12 @@
 #include "ball.h"
 #include "main.h"
 
-Ball::Ball(float x, float y, float r,double v,color_t color) {
+Ball::Ball(float x, float y, float r,double vx,double vy,color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->radius = r;
     this->rotation = 0;
-    speed = v;
+    this->speedx = vx;
+    this->speedy = vy;
 
     int n = 360;
     static GLfloat vertex_buffer_data[360*9];
@@ -47,9 +48,23 @@ void Ball::set_position(float x, float y) {
     this->position = glm::vec3(x, y, 0);
 }
 
+void Ball::set_radius(float r) {
+    this->radius = r;
+}
+
+void Ball::set_speed(double vx, double vy) {
+    this->speedx = vx;
+    this->speedy = vy;
+}
+
 void Ball::tick() {
-    this->position.x -= speed;
-    // this->position.y -= speed;
+    this->position.x -= this->speedx;
+     this->position.y -= this->speedy;
+}
+
+void Ball::move(float x,float y) {
+    this->position.x += x;
+     this->position.y += y;
 }
 
 bounding_box_t Ball::bounding_box() {

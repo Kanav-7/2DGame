@@ -6,13 +6,13 @@ Rectangle::Rectangle(float x, float y, color_t color) {
     this->rotation = 0;
     speed = 0.01;
     static const GLfloat vertex_buffer_data[] = {
-        -0.2, -0.2, 0, // vertex 1
-        0.2,  -0.2, 0, // vertex 2
-        0.2,  0.2, 0, // vertex 3
+        -5, -1.5, 0, // vertex 1
+        -5,  1.5, 0, // vertex 2
+         5 , 1.5, 0, // vertex 3
 
-        0.2,  0.2, 0, // vertex 3
-        -0.2, 0.2, 0, // vertex 4
-        -0.2, -0.2, 0 // vertex 1
+        -5,  -1.5, 0, // vertex 3
+        5, -1.5, 0, // vertex 4
+        5, 1.5, 0 // vertex 1
     };
 
     this->object = create3DObject(GL_TRIANGLES, 6, vertex_buffer_data, color, GL_FILL);
@@ -40,6 +40,6 @@ void Rectangle::tick() {
 
 bounding_box_r Rectangle::bounding_box() {
     float x = this->position.x, y = this->position.y;
-    bounding_box_t bbox = { x, y, 0.4, 0.4 };
+    bounding_box_r bbox = { x, y, 0.4, 0.4 };
     return bbox;
 }
