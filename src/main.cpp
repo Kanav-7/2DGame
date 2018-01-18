@@ -2,6 +2,7 @@
 #include "timer.h"
 #include "ball.h"
 #include "rectangle.h"
+#include "semi.h"
 
 using namespace std;
 
@@ -13,6 +14,7 @@ GLFWwindow *window;
 * Customizable functions *
 **************************/
 
+Semi pool;
 Ball  ball[100000];
 Ball player;
 int player_state = 0;
@@ -22,7 +24,7 @@ float ball_var_start = 1.0f, ball_var_end = 4.5f;
 float ball_x_start = -5.7f, ball_x_end = -5.0f;
 float ball_vel_start = 0.01f, ball_vel_end = 0.05f;
 float player_radius = 0.7f,player_x = -4.0f, player_y = -0.8f;
-
+float pool_x = 0,pool_y = -2.7,pool_radius = 1.3;
 float vel = 0.05;
 Rectangle flore;
 int num = 8;
@@ -73,6 +75,7 @@ void draw() {
 
     flore.draw(VP);
     player.draw(VP);
+    pool.draw(VP);
 }
 
 void tick_input(GLFWwindow *window) {
@@ -138,8 +141,14 @@ void tick_elements()
 void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
     // Create the models
+
+
     player = Ball(player_x,player_y,player_radius,0,0,COLOR_GREEN);
+
+
     flore = Rectangle(0,-3,COLOR_BLACK);
+    pool = Semi(pool_x,pool_y,pool_radius,{ 136,146,233 });
+
     for(int i=0;i<num;i++)
     {
         float vary = random(ball_var_start,ball_var_end);
@@ -148,6 +157,8 @@ void initGL(GLFWwindow *window, int width, int height) {
         float xy = random(ball_x_start,ball_x_end);
         ball[i] = Ball(xy,vary,rady, -vely ,0, COLOR_RED);
     }
+
+
     // Create and compile our GLSL program from the shaders
     programID = LoadShaders("Sample_GL.vert", "Sample_GL.frag");
     // Get a handle for our "MVP" uniform
