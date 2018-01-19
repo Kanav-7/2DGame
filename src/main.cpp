@@ -148,7 +148,7 @@ void initGL(GLFWwindow *window, int width, int height) {
 
 
     flore = Rectangle(0,-3.5,COLOR_BLACK);
-    pool = Semi(pool_x,pool_y,pool_radius,{ 136,146,233 });
+    pool = Semi(pool_x,pool_y,pool_radius,COLOR_BLUE);
 
     for(int i=0;i<num;i++)
     {
@@ -156,7 +156,7 @@ void initGL(GLFWwindow *window, int width, int height) {
         float vely = random(ball_vel_start,ball_vel_end);
         float rady = random(ball_rad_start,ball_rad_end);
         float xy = random(ball_x_start,ball_x_end);
-        ball[i] = Ball(xy,vary,rady, -vely ,0, COLOR_RED);
+        ball[i] = Ball(xy,vary,rady, -vely ,0, (rand()%2)?(COLOR_RED):(COLOR_YELLOW));
     }
 
 
