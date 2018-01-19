@@ -18,13 +18,13 @@ Semi pool;
 Ball  ball[100000];
 Ball player;
 int player_state = 0;
-double acc = 0.002, upspeed = -0.15f;
+double acc = 0.002f, upspeed = -0.15f;
 float ball_rad_start = 0.2f, ball_rad_end = 0.6f;
 float ball_var_start = 1.0f, ball_var_end = 4.5f;
 float ball_x_start = -5.7f, ball_x_end = -5.0f;
 float ball_vel_start = 0.01f, ball_vel_end = 0.05f;
-float player_radius = 0.7f,player_x = -4.0f, player_y = -0.8f;
-float pool_x = 0,pool_y = -2.7,pool_radius = 1.3;
+float player_radius = 0.7f,player_x = -4.0f, player_y = -1.3f;
+float pool_x = 0,pool_y = -2.0f,pool_radius = 1.3;
 float vel = 0.05;
 Rectangle flore;
 int num = 8;
@@ -86,6 +86,7 @@ void tick_input(GLFWwindow *window) {
 
     if (right && player.position.x < 5 - player_radius) {
         player.move(vel,0);
+        // ball1.rotation+= 10;
     }
     if (left && player.position.x > player_radius - 5) {
         player.move(-vel,0);
@@ -146,7 +147,7 @@ void initGL(GLFWwindow *window, int width, int height) {
     player = Ball(player_x,player_y,player_radius,0,0,COLOR_GREEN);
 
 
-    flore = Rectangle(0,-3,COLOR_BLACK);
+    flore = Rectangle(0,-3.5,COLOR_BLACK);
     pool = Semi(pool_x,pool_y,pool_radius,{ 136,146,233 });
 
     for(int i=0;i<num;i++)
@@ -223,7 +224,7 @@ bool detect_collision(bounding_box_t a, bounding_box_t b) {
 
 bool detect_collision_floor(bounding_box_t a,bounding_box_r b)
 {
-    return (a.y - a.r < b.y/2);
+    return (a.y - a.r < b.y + 1.5f);
 }
 
 void reset_screen() {
