@@ -80,8 +80,8 @@ struct bounding_box_r {
 float random(float a,float b);
 //bool ball_reset(Ball b);
 bool detect_collision(bounding_box_t a, bounding_box_t b);
-bool detect_collision_floor(bounding_box_t a, bounding_box_r b);
-
+bool detect_collision_floor(bounding_box_t a, bounding_box_r b,bounding_box_t pool);
+bool detect_pool_surface(bounding_box_t a,bounding_box_t pool);
 
 extern float screen_zoom, screen_center_x, screen_center_y;
 void reset_screen();

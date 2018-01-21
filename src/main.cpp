@@ -17,17 +17,17 @@ GLFWwindow *window;
 Semi pool;
 Ball  ball[100000];
 Ball player;
-int player_state = 0;
-double acc = 0.002f, upspeed = -0.15f;
+int player_state = 0,in_water = 0;
+double acc = 0.002f, upspeed = -0.15f,waterspeed = -0.1f;
 float ball_rad_start = 0.2f, ball_rad_end = 0.6f;
 float ball_var_start = 1.0f, ball_var_end = 4.5f;
 float ball_x_start = -5.7f, ball_x_end = -5.0f;
 float ball_vel_start = 0.01f, ball_vel_end = 0.05f;
 float player_radius = 0.7f,player_x = -4.0f, player_y = -1.3f;
-float pool_x = 0,pool_y = -2.0f,pool_radius = 1.3;
+float pool_x = 0,pool_y = -2.0f,pool_radius = 1.5;
 float vel = 0.05;
 Rectangle flore;
-int num = 8;
+int num = 0;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 
 Timer t60(1.0 / 60);
@@ -74,8 +74,9 @@ void draw() {
         ball[i].draw(VP);
 
     flore.draw(VP);
-    player.draw(VP);
     pool.draw(VP);
+    player.draw(VP);
+
 }
 
 void tick_input(GLFWwindow *window) {
@@ -85,15 +86,51 @@ void tick_input(GLFWwindow *window) {
 //    int down = glfwGetKey(window, GLFW_KEY_DOWN);
 
     if (right && player.position.x < 5 - player_radius) {
-        player.move(vel,0);
+        if(in_water && detect_collision_floor(player.bounding_box(),flore.bounding_box(),pool.bounding_box()))
+        {
+            if(player.position.x + 0.03f <= -player.radius + pool.radius)
+            {
+                player.set_position(player.position.x + 0.03f,player.position.y);
+                player.set_position(player.position.x,pool_y - sqrt(abs((pool_radius - player_radius)*(pool_radius - player_radius) - player.position.x*player.position.x)));
+            }
+            if(player.position.x  > -player.radius + pool.radius)
+            {
+                player.set_speed(0,waterspeed);
+                player_state = 1;
+            }
+
+        }
+        else
+            player.move(vel,0);
+
         // ball1.rotation+= 10;
     }
-    if (left && player.position.x > player_radius - 5) {
-        player.move(-vel,0);
+    if (left && player.position.x > player_radius - 5)
+    {
+        if(in_water && detect_collision_floor(player.bounding_box(),flore.bounding_box(),pool.bounding_box()))
+        {
+            if(player.position.x - 0.03f >= player.radius - pool.radius)
+            {
+                player.set_position(player.position.x - 0.03f,player.position.y);
+    //            cout << "YO" << endl;
+                player.set_position(player.position.x,pool_y - sqrt(abs((pool_radius - player_radius)*(pool_radius - player_radius) - player.position.x*player.position.x)));
+            }
+            if(player.position.x  < player.radius - pool.radius)
+            {
+                player.set_speed(0,waterspeed);
+                player_state = 1;
+            }
+        }
+        else
+            player.move(-vel,0);
     }
     if (up  && player.position.y < 5 && player_state == 0) {
+        if(in_water == 1)
+            player.set_speed(0,waterspeed);
+        else
+            player.set_speed(0,upspeed);
+
         player_state = 1;
-        player.set_speed(0,upspeed);
     }
 //    if (down && player.position.y > -0.8) {
 //        player.move(0,-vel);
@@ -104,11 +141,43 @@ void tick_elements()
 {
     player.tick();
 
-    if(detect_collision_floor(player.bounding_box(),flore.bounding_box()))
+    if(detect_pool_surface(player.bounding_box(),pool.bounding_box()))
     {
+        if(in_water == 0)
+        {
+            in_water = 1;
+            player_state = 1;
+            player.set_speed(player.speedx,0.05);
+            if(player.position.x > pool_x + pool_radius - player_radius) //boundary cases
+                player.set_position(pool_radius - player_radius,pool_y);
+            if(player.position.x < pool_x - pool_radius + player_radius)
+                player.set_position( -pool_radius + player_radius,pool_y);
+        }
+    }
+    else
+        in_water = 0;
+    if(detect_collision_floor(player.bounding_box(),flore.bounding_box(),pool.bounding_box()))
+    {
+        if(!in_water){
         player.set_position(player.position.x,player_y);
         player.speedy = 0;
         player_state = 0;
+        }
+        else
+        {
+            player_state = 0;
+            if(player.position.x <= 0){
+                player.set_position(player.position.x + 0.02f,player.position.y);
+                player.set_position(player.position.x,pool_y - sqrt(abs((pool_radius - player_radius)*(pool_radius - player_radius) - player.position.x*player.position.x)));
+            }
+            if(player.position.x > 0){
+                player.set_position(player.position.x - 0.02f,player.position.y);
+                player.set_position(player.position.x,pool_y - sqrt(abs((pool_radius - player_radius)*(pool_radius - player_radius) - player.position.x*player.position.x)));
+            }
+//            cout << player.position.y << endl;
+
+        }
+
     }
     if(player_state == 1)
     {
@@ -119,7 +188,7 @@ void tick_elements()
     {
         if(player.speedy > 0 && detect_collision(player.bounding_box(),ball[i].bounding_box()))
         {
-             player.set_speed(-player.speedx,-player.speedy + 0.005f);
+             player.set_speed(-player.speedx,-player.speedy - 0.005f);
              player.tick();
 
              ball[i].set_position(random(ball_x_start,ball_x_end),random(ball_var_start,ball_var_end));
@@ -143,12 +212,12 @@ void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
     // Create the models
 
+    pool = Semi(pool_x,pool_y,pool_radius,COLOR_BLUE);
 
     player = Ball(player_x,player_y,player_radius,0,0,COLOR_GREEN);
 
 
     flore = Rectangle(0,-3.5,COLOR_BLACK);
-    pool = Semi(pool_x,pool_y,pool_radius,COLOR_BLUE);
 
     for(int i=0;i<num;i++)
     {
@@ -222,9 +291,21 @@ bool detect_collision(bounding_box_t a, bounding_box_t b) {
     return false;
 }
 
-bool detect_collision_floor(bounding_box_t a,bounding_box_r b)
+bool detect_collision_floor(bounding_box_t a,bounding_box_r b,bounding_box_t pool)
 {
-    return (a.y - a.r < b.y + 1.5f);
+//    return (a.y - a.r < b.y + 1.5f) && !((a.x < pool.x + pool.r) && (a.x > pool.x - pool.r));
+    if(in_water)
+         return ((a.x-pool.x)*(a.x-pool.x) + (a.y-pool.y)*(a.y-pool.y) > (a.r-pool.r)*(a.r-pool.r)) && (a.y <= pool.y);
+
+//        cout << ((a.y-a.r-pool.y)*(a.y-a.r-pool.y) <= abs((a.x*a.x - pool.r*pool.r)));
+
+    return (a.y - a.r < b.y + 1.5f) && !((a.x < pool.x + pool.r) && (a.x > pool.x - pool.r));
+
+}
+
+bool detect_pool_surface(bounding_box_t a,bounding_box_t pool)
+{
+    return ((a.x < pool.x + pool.r) && (a.x > pool.x - pool.r) && (a.y - a.r <= pool.y));
 }
 
 void reset_screen() {
