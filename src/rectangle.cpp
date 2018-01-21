@@ -1,19 +1,33 @@
 #include "rectangle.h"
 #include "main.h"
 
-Rectangle::Rectangle(float x, float y, color_t color) {
+Rectangle::Rectangle(float x, float y,float we,float he, color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = 0;
+    this->width = we;
+    this->height = he;
     speed = 0.01;
-    static const GLfloat vertex_buffer_data[] = {
-        -5, -1.5, 0, // vertex 1
-        -5,  1.5, 0, // vertex 2
-         5 , 1.5, 0, // vertex 3
+    static GLfloat vertex_buffer_data[100] ;
+       vertex_buffer_data[0] = -we/2.0f;
+       vertex_buffer_data[1] = -he/2.0f;
+       vertex_buffer_data[2] = 0; // vertex 1
+        vertex_buffer_data[3] = -we/2.0f;
+        vertex_buffer_data[4] = he/2.0f;
+        vertex_buffer_data[5] = 0; // vertex 2
+        vertex_buffer_data[6] =  we/2.0f ;
+        vertex_buffer_data[7] = he/2.0f;
+        vertex_buffer_data[8] = 0; // vertex 3
 
-        -5,  -1.5, 0, // vertex 3
-        5, -1.5, 0, // vertex 4
-        5, 1.5, 0 // vertex 1
-    };
+        vertex_buffer_data[9] = -we/2.0f;
+        vertex_buffer_data[10] = -he/2.0f;
+        vertex_buffer_data[11] = 0; // vertex 3
+        vertex_buffer_data[12] = we/2.0f;
+        vertex_buffer_data[13] = -he/2.0f;
+        vertex_buffer_data[14] = 0; // vertex 4
+        vertex_buffer_data[15] = we/2.0f;
+        vertex_buffer_data[16] = he/2.0f;
+        vertex_buffer_data[17] = 0; // vertex 1
+
 
     this->object = create3DObject(GL_TRIANGLES, 6, vertex_buffer_data, color, GL_FILL);
 }
@@ -39,7 +53,7 @@ void Rectangle::tick() {
 }
 
 bounding_box_r Rectangle::bounding_box() {
-    float x = this->position.x, y = this->position.y;
-    bounding_box_r bbox = { x, y, 0.4, 0.4 };
+    float x = this->position.x, y = this->position.y, w= this->width,h = this->height;
+    bounding_box_r bbox = { x, y, w, h };
     return bbox;
 }

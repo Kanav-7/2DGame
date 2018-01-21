@@ -25,8 +25,12 @@ float ball_x_start = -5.7f, ball_x_end = -5.0f;
 float ball_vel_start = 0.01f, ball_vel_end = 0.05f;
 float player_radius = 0.7f,player_x = -4.0f, player_y = -1.3f;
 float pool_x = 0,pool_y = -2.0f,pool_radius = 1.5;
+float tramp_x = 3,tramp_y=-1.65,tramp_w = 1.5,tramp_h = 0.7;
 float vel = 0.05;
+int flag = 0;
 Rectangle flore;
+Rectangle tramp;
+Semi tramp_curve;
 int num = 0;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 
@@ -75,6 +79,8 @@ void draw() {
 
     flore.draw(VP);
     pool.draw(VP);
+    tramp.draw(VP);
+    tramp_curve.draw(VP);
     player.draw(VP);
 
 }
@@ -97,6 +103,7 @@ void tick_input(GLFWwindow *window) {
             {
                 player.set_speed(0,waterspeed);
                 player_state = 1;
+                flag = 1;
             }
 
         }
@@ -119,6 +126,7 @@ void tick_input(GLFWwindow *window) {
             {
                 player.set_speed(0,waterspeed);
                 player_state = 1;
+                flag = 1;
             }
         }
         else
@@ -141,6 +149,11 @@ void tick_elements()
 {
     player.tick();
 
+    if(detect_collision_tramp(player.bounding_box(),tramp.bounding_box()))
+    {
+        player_state = 1;
+        player.set_speed(player.speedx,-player.speedy-0.05f);
+    }
     if(detect_pool_surface(player.bounding_box(),pool.bounding_box()))
     {
         if(in_water == 0)
@@ -165,7 +178,12 @@ void tick_elements()
         }
         else
         {
-            player_state = 0;
+            if(!flag)
+            {
+                player_state = 0;
+            }
+            else
+                flag = 0;
             if(player.position.x <= 0){
                 player.set_position(player.position.x + 0.02f,player.position.y);
                 player.set_position(player.position.x,pool_y - sqrt(abs((pool_radius - player_radius)*(pool_radius - player_radius) - player.position.x*player.position.x)));
@@ -216,8 +234,9 @@ void initGL(GLFWwindow *window, int width, int height) {
 
     player = Ball(player_x,player_y,player_radius,0,0,COLOR_GREEN);
 
-
-    flore = Rectangle(0,-3.5,COLOR_BLACK);
+    tramp = Rectangle(tramp_x,tramp_y,tramp_w,tramp_h,COLOR_RED);
+    tramp_curve = Semi(tramp_x,tramp_y + tramp_h/2.0f,tramp_h - 0.1f,COLOR_YELLOW);
+    flore = Rectangle(0,-3.5,10,3,COLOR_BLACK);
 
     for(int i=0;i<num;i++)
     {
@@ -289,6 +308,11 @@ bool detect_collision(bounding_box_t a, bounding_box_t b) {
         return true;
     }
     return false;
+}
+
+bool detect_collision_tramp(bounding_box_t a, bounding_box_r b)
+{
+    return ((a.y - a.r < b.y)&&(a.x > b.x - b.w/2.0f)&&(a.x < b.x + b.w/2.0f));
 }
 
 bool detect_collision_floor(bounding_box_t a,bounding_box_r b,bounding_box_t pool)

@@ -7,9 +7,11 @@
 class Rectangle {
 public:
     Rectangle() {}
-    Rectangle(float x, float y, color_t color);
+    Rectangle(float x, float y,float we,float he, color_t color);
     glm::vec3 position;
     float rotation;
+    float width;
+    float height;
     void draw(glm::mat4 VP);
     void set_position(float x, float y);
     void tick();
