@@ -3,6 +3,7 @@
 #include "ball.h"
 #include "rectangle.h"
 #include "semi.h"
+#include "triangle.h"
 
 using namespace std;
 
@@ -27,11 +28,13 @@ float player_radius = 0.7f,player_x = -4.0f, player_y = -1.3f;
 float pool_x = 0,pool_y = -2.0f,pool_radius = 1.5;
 float tramp_x = 4,tramp_y=-1.65,tramp_w = 1.5,tramp_h = 0.7;
 float vel = 0.05;
+float spikes_x = -3.0f,spikes_dist = 0.4f,spikes_y=-2.0f;
 int flag = 0;
+Triangle spikes[3];
 Rectangle flore;
 Rectangle tramp;
 Semi tramp_curve;
-int num = 0;
+int num = 5;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 
 Timer t60(1.0 / 60);
@@ -81,6 +84,9 @@ void draw() {
     pool.draw(VP);
     tramp.draw(VP);
     tramp_curve.draw(VP);
+    spikes[0].draw(VP);
+    spikes[1].draw(VP);
+    spikes[2].draw(VP);
     player.draw(VP);
 
 }
@@ -150,6 +156,12 @@ void tick_elements()
 //    cout << player_state << endl;
     player.tick();
 
+    if(detect_spikes_surface(player.bounding_box()))
+    {
+        spikes[0].set_position(100,100);
+        spikes[1].set_position(100,100);
+        spikes[2].set_position(100,100);
+    }
     if(detect_collision_tramp(player.bounding_box(),tramp.bounding_box()))
     {
         player_state = 1;
@@ -239,6 +251,10 @@ void initGL(GLFWwindow *window, int width, int height) {
     tramp = Rectangle(tramp_x,tramp_y,tramp_w,tramp_h,COLOR_RED);
     tramp_curve = Semi(tramp_x,tramp_y + tramp_h/2.0f,tramp_h - 0.1f,COLOR_YELLOW);
     flore = Rectangle(0,-3.5,10,3,COLOR_BLACK);
+
+    spikes[0] = Triangle(spikes_x,spikes_y,COLOR_YELLOW);
+    spikes[1] = Triangle(spikes_x - spikes_dist,spikes_y,COLOR_YELLOW);
+    spikes[2] = Triangle(spikes_x-2*spikes_dist,spikes_y,COLOR_YELLOW);
 
     for(int i=0;i<num;i++)
     {
@@ -338,6 +354,12 @@ bool detect_pool_surface(bounding_box_t a,bounding_box_t pool)
 {
     return ((a.x < pool.x + pool.r) && (a.x > pool.x - pool.r) && (a.y - a.r <= pool.y));
 }
+
+bool detect_spikes_surface(bounding_box_t a)
+{
+    return ((a.x < spikes_x + spikes_dist/2.0f)&&(a.x > spikes_x - 5*(spikes_dist/2.0f))&&(a.y < 0.4f - 2.0f + a.r ));
+}
+
 
 void reset_screen() {
     float top    = screen_center_y + 5 / screen_zoom;
