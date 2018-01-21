@@ -25,7 +25,7 @@ float ball_x_start = -5.7f, ball_x_end = -5.0f;
 float ball_vel_start = 0.01f, ball_vel_end = 0.05f;
 float player_radius = 0.7f,player_x = -4.0f, player_y = -1.3f;
 float pool_x = 0,pool_y = -2.0f,pool_radius = 1.5;
-float tramp_x = 3,tramp_y=-1.65,tramp_w = 1.5,tramp_h = 0.7;
+float tramp_x = 4,tramp_y=-1.65,tramp_w = 1.5,tramp_h = 0.7;
 float vel = 0.05;
 int flag = 0;
 Rectangle flore;
@@ -91,7 +91,7 @@ void tick_input(GLFWwindow *window) {
     int up = glfwGetKey(window, GLFW_KEY_UP);
 //    int down = glfwGetKey(window, GLFW_KEY_DOWN);
 
-    if (right && player.position.x < 5 - player_radius) {
+    if (right && player.position.x < 5 - player_radius && !detect_sides_tramp(player.bounding_box(),tramp.bounding_box())) {
         if(in_water && detect_collision_floor(player.bounding_box(),flore.bounding_box(),pool.bounding_box()))
         {
             if(player.position.x + 0.03f <= -player.radius + pool.radius)
@@ -147,6 +147,7 @@ void tick_input(GLFWwindow *window) {
 
 void tick_elements()
 {
+//    cout << player_state << endl;
     player.tick();
 
     if(detect_collision_tramp(player.bounding_box(),tramp.bounding_box()))
@@ -180,6 +181,7 @@ void tick_elements()
         {
             if(!flag)
             {
+//                cout << "Here" << endl;
                 player_state = 0;
             }
             else
@@ -312,7 +314,12 @@ bool detect_collision(bounding_box_t a, bounding_box_t b) {
 
 bool detect_collision_tramp(bounding_box_t a, bounding_box_r b)
 {
-    return ((a.y - a.r < b.y)&&(a.x > b.x - b.w/2.0f)&&(a.x < b.x + b.w/2.0f));
+    return ((a.y < b.y+b.l/2.0f)&&(a.x + a.r> b.x - b.w/2.0f)&&(a.x - a.r < b.x + b.w/2.0f));
+}
+
+bool detect_sides_tramp(bounding_box_t a, bounding_box_r b)
+{
+    return (a.x + a.r > b.x - tramp_w/2.0f && a.y < b.y + b.l);
 }
 
 bool detect_collision_floor(bounding_box_t a,bounding_box_r b,bounding_box_t pool)
