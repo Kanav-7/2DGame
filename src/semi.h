@@ -7,7 +7,7 @@
 class Semi {
 public:
     Semi() {}
-    Semi(float x, float y,float r,color_t color);
+    Semi(float x, float y,float r,float rot,color_t color);
     glm::   vec3 position;
     float rotation;
     float radius;

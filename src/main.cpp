@@ -16,6 +16,7 @@ GLFWwindow *window;
 **************************/
 
 Semi pool;
+Semi magnetin,magnetout;
 Ball  ball[100000];
 Ball player;
 int player_state = 0,in_water = 0;
@@ -30,11 +31,13 @@ float tramp_x = 4,tramp_y=-1.65,tramp_w = 1.5,tramp_h = 0.7;
 float vel = 0.05;
 float spikes_x = -3.0f,spikes_dist = 0.4f,spikes_y=-2.0f;
 int flag = 0;
+int magnet_present = 1;
 Triangle spikes[3];
 Rectangle flore;
 Rectangle tramp;
 Semi tramp_curve;
-int num = 5;
+Rectangle slopes;
+int num = 0;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 
 Timer t60(1.0 / 60);
@@ -77,8 +80,12 @@ void draw() {
     glm::mat4 MVP;  // MVP = Projection * View * Model
 
     // Scene render
+
+    magnetin.draw(VP);
+    magnetout.draw(VP);
     for(int i=0;i<num;i++)
         ball[i].draw(VP);
+
 
     flore.draw(VP);
     pool.draw(VP);
@@ -93,11 +100,16 @@ void draw() {
 
 void tick_input(GLFWwindow *window) {
     int left  = glfwGetKey(window, GLFW_KEY_LEFT);
+    int A_left  = glfwGetKey(window, GLFW_KEY_A);
+
     int right = glfwGetKey(window, GLFW_KEY_RIGHT);
+    int D_right = glfwGetKey(window, GLFW_KEY_D);
+
     int up = glfwGetKey(window, GLFW_KEY_UP);
+    int SPACE_up = glfwGetKey(window, GLFW_KEY_SPACE);
 //    int down = glfwGetKey(window, GLFW_KEY_DOWN);
 
-    if (right && player.position.x < 5 - player_radius && !detect_sides_tramp(player.bounding_box(),tramp.bounding_box())) {
+    if ((D_right ||right) && player.position.x < 5 - player_radius && !detect_sides_tramp(player.bounding_box(),tramp.bounding_box())) {
         if(in_water && detect_collision_floor(player.bounding_box(),flore.bounding_box(),pool.bounding_box()))
         {
             if(player.position.x + 0.03f <= -player.radius + pool.radius)
@@ -118,7 +130,7 @@ void tick_input(GLFWwindow *window) {
 
         // ball1.rotation+= 10;
     }
-    if (left && player.position.x > player_radius - 5)
+    if ((A_left || left) && player.position.x > player_radius - 5)
     {
         if(in_water && detect_collision_floor(player.bounding_box(),flore.bounding_box(),pool.bounding_box()))
         {
@@ -138,7 +150,7 @@ void tick_input(GLFWwindow *window) {
         else
             player.move(-vel,0);
     }
-    if (up  && player.position.y < 5 && player_state == 0) {
+    if ((SPACE_up || up)  && player.position.y < 5 && player_state == 0) {
         if(in_water == 1)
             player.set_speed(0,waterspeed);
         else
@@ -154,7 +166,29 @@ void tick_input(GLFWwindow *window) {
 void tick_elements()
 {
 //    cout << player_state << endl;
+//    cout << player.speedx << endl;
     player.tick();
+
+    if(magnet_present && player.position.y < 3 && player.position.y > 1)
+            player.set_speed(player.speedx+0.001,player.speedy);
+
+    spikes[0].tick();
+    spikes[1].tick();
+    spikes[2].tick();
+    spikes_x-=spikes[0].speed;
+
+    if(spikes_x < -4.0f)
+    {
+        spikes[0].speed = -0.01;
+        spikes[1].speed = -0.01;
+        spikes[2].speed = -0.01;
+    }
+    if(spikes_x > -2.5f)
+    {
+        spikes[0].speed = 0.01;
+        spikes[1].speed = 0.01;
+        spikes[2].speed = 0.01;
+    }
 
     if(detect_spikes_surface(player.bounding_box()))
     {
@@ -187,13 +221,13 @@ void tick_elements()
         if(!in_water){
         player.set_position(player.position.x,player_y);
         player.speedy = 0;
+        player.speedx = 0;
         player_state = 0;
         }
         else
         {
             if(!flag)
             {
-//                cout << "Here" << endl;
                 player_state = 0;
             }
             else
@@ -206,14 +240,13 @@ void tick_elements()
                 player.set_position(player.position.x - 0.02f,player.position.y);
                 player.set_position(player.position.x,pool_y - sqrt(abs((pool_radius - player_radius)*(pool_radius - player_radius) - player.position.x*player.position.x)));
             }
-//            cout << player.position.y << endl;
 
         }
 
     }
     if(player_state == 1)
     {
-        player.set_speed(0,player.speedy+ acc);
+        player.set_speed(player.speedx,player.speedy+ acc);
     }
 
     for(int i=0;i<num;i++)
@@ -244,13 +277,15 @@ void initGL(GLFWwindow *window, int width, int height) {
     /* Objects should be created before any other gl function and shaders */
     // Create the models
 
-    pool = Semi(pool_x,pool_y,pool_radius,COLOR_BLUE);
+    magnetin =Semi(-4,2,1,90,COLOR_BLACK);
+    magnetout = Semi(-4,2,0.7,90,COLOR_BACKGROUND);
+    pool = Semi(pool_x,pool_y,pool_radius,180,COLOR_BLUE);
 
     player = Ball(player_x,player_y,player_radius,0,0,COLOR_GREEN);
 
     tramp = Rectangle(tramp_x,tramp_y,tramp_w,tramp_h,COLOR_RED);
-    tramp_curve = Semi(tramp_x,tramp_y + tramp_h/2.0f,tramp_h - 0.1f,COLOR_YELLOW);
-    flore = Rectangle(0,-3.5,10,3,COLOR_BLACK);
+    tramp_curve = Semi(tramp_x,tramp_y + tramp_h/2.0f,tramp_h - 0.1f,180,COLOR_YELLOW);
+    flore = Rectangle(0,-3.5,10,3,COLOR_BROWN);
 
     spikes[0] = Triangle(spikes_x,spikes_y,COLOR_YELLOW);
     spikes[1] = Triangle(spikes_x - spikes_dist,spikes_y,COLOR_YELLOW);

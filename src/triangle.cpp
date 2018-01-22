@@ -4,7 +4,7 @@
 Triangle::Triangle(float x, float y,color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->rotation = 0;
-    speed = 0.01;
+    speed = -0.01;
     static GLfloat vertex_buffer_data[100] ;
        vertex_buffer_data[0] =0.2f;
        vertex_buffer_data[1] = 0;

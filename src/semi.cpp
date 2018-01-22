@@ -1,10 +1,10 @@
 #include "semi.h"
 #include "main.h"
 
-Semi::Semi(float x, float y, float r,color_t color) {
+Semi::Semi(float x, float y, float r,float rot,color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->radius = r;
-    this->rotation = 180;
+    this->rotation = rot;
 //    this->speedx = vx;
 //    this->speedy = vy;
 
