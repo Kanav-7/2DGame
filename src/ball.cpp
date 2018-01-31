@@ -7,7 +7,7 @@ Ball::Ball(float x, float y, float r,double vx,double vy,color_t color) {
     this->rotation = 0;
     this->speedx = vx;
     this->speedy = vy;
-
+    this->col = color;
     int n = 360;
     static GLfloat vertex_buffer_data[360*9];
     float pi = M_PI*2;

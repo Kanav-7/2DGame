@@ -66,10 +66,12 @@ void mouseButton(GLFWwindow *window, int button, int action, int mods) {
     switch (button) {
     case GLFW_MOUSE_BUTTON_LEFT:
         if (action == GLFW_PRESS) {
-            // Do something
+            drag_pan = true;
             return;
         } else if (action == GLFW_RELEASE) {
-            // Do something
+            drag_pan = false;
+            drag_oldx = -1;
+            drag_oldy = -1;
         }
         break;
     // case GLFW_MOUSE_BUTTON_RIGHT:
@@ -83,5 +85,11 @@ void mouseButton(GLFWwindow *window, int button, int action, int mods) {
 }
 
 void scroll_callback(GLFWwindow *window, double xoffset, double yoffset) {
-    // Do something
+    if(screen_zoom < 1)
+        screen_zoom = 1;
+    else
+    {
+        screen_zoom+=yoffset/50;
+        reset_screen();
+    }
 }

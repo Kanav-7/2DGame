@@ -13,6 +13,7 @@ public:
     float radius;
     double speedx;
     double speedy;
+    color_t col;
     void draw(glm::mat4 VP);
     void set_position(float x, float y);
     void set_radius(float r);

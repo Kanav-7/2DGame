@@ -85,7 +85,7 @@ bool detect_pool_surface(bounding_box_t a,bounding_box_t pool);
 bool detect_collision_tramp(bounding_box_t a, bounding_box_r b);
 bool detect_sides_tramp(bounding_box_t a, bounding_box_r b);
 bool detect_spikes_surface(bounding_box_t a);
-
+bool detect_slope_collision (bounding_box_t a,bounding_box_r b,float angd);
 
 
 extern float screen_zoom, screen_center_x, screen_center_y;

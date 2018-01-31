@@ -1,12 +1,12 @@
 #include "rectangle.h"
 #include "main.h"
 
-Rectangle::Rectangle(float x, float y,float we,float he, color_t color) {
+Rectangle::Rectangle(float x, float y,float we,float he,float r,float v, color_t color) {
     this->position = glm::vec3(x, y, 0);
-    this->rotation = 0;
+    this->rotation = r;
     this->width = we;
     this->height = he;
-    speed = 0.01;
+    this->speed = v;
     static GLfloat vertex_buffer_data[100] ;
        vertex_buffer_data[0] = -we/2.0f;
        vertex_buffer_data[1] = -he/2.0f;
@@ -45,6 +45,10 @@ void Rectangle::draw(glm::mat4 VP) {
 
 void Rectangle::set_position(float x, float y) {
     this->position = glm::vec3(x, y, 0);
+}
+
+void Rectangle::set_speed(float v) {
+    this->speed = v;
 }
 
 void Rectangle::tick() {
