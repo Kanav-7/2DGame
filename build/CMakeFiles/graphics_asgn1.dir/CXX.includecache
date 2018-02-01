@@ -20,6 +20,18 @@ main.h
 main.h
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
 
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/digit.cpp
+digit.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/digit.h
+main.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/digit.h
+main.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+line.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.h
+
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/input.cpp
 iostream
 -
@@ -42,6 +54,16 @@ glm/gtc/matrix_transform.hpp
 main.h
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
 
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.cpp
+line.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.h
+main.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.h
+main.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.cpp
 main.h
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
@@ -55,6 +77,8 @@ semi.h
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/semi.h
 triangle.h
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/triangle.h
+score.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/score.h
 
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
 iostream
@@ -129,6 +153,18 @@ main.h
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/rectangle.h
 main.h
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/score.cpp
+score.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/score.h
+main.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+cstring
+-
+
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/score.h
+digit.h
+/home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/digit.h
 
 /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/semi.cpp
 semi.h

@@ -8,13 +8,25 @@ CMakeFiles/graphics_asgn1.dir/src/ball.cpp.o: ../src/main.h
 CMakeFiles/graphics_asgn1.dir/src/color.cpp.o: ../src/color.cpp
 CMakeFiles/graphics_asgn1.dir/src/color.cpp.o: ../src/main.h
 
+CMakeFiles/graphics_asgn1.dir/src/digit.cpp.o: ../src/digit.cpp
+CMakeFiles/graphics_asgn1.dir/src/digit.cpp.o: ../src/digit.h
+CMakeFiles/graphics_asgn1.dir/src/digit.cpp.o: ../src/line.h
+CMakeFiles/graphics_asgn1.dir/src/digit.cpp.o: ../src/main.h
+
 CMakeFiles/graphics_asgn1.dir/src/input.cpp.o: ../src/input.cpp
 CMakeFiles/graphics_asgn1.dir/src/input.cpp.o: ../src/main.h
 
+CMakeFiles/graphics_asgn1.dir/src/line.cpp.o: ../src/line.cpp
+CMakeFiles/graphics_asgn1.dir/src/line.cpp.o: ../src/line.h
+CMakeFiles/graphics_asgn1.dir/src/line.cpp.o: ../src/main.h
+
 CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/ball.h
+CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/digit.h
+CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/line.h
 CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/main.cpp
 CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/main.h
 CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/rectangle.h
+CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/score.h
 CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/semi.h
 CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/timer.h
 CMakeFiles/graphics_asgn1.dir/src/main.cpp.o: ../src/triangle.h
@@ -28,6 +40,12 @@ CMakeFiles/graphics_asgn1.dir/src/other_handlers.cpp.o: ../src/other_handlers.cp
 CMakeFiles/graphics_asgn1.dir/src/rectangle.cpp.o: ../src/main.h
 CMakeFiles/graphics_asgn1.dir/src/rectangle.cpp.o: ../src/rectangle.cpp
 CMakeFiles/graphics_asgn1.dir/src/rectangle.cpp.o: ../src/rectangle.h
+
+CMakeFiles/graphics_asgn1.dir/src/score.cpp.o: ../src/digit.h
+CMakeFiles/graphics_asgn1.dir/src/score.cpp.o: ../src/line.h
+CMakeFiles/graphics_asgn1.dir/src/score.cpp.o: ../src/main.h
+CMakeFiles/graphics_asgn1.dir/src/score.cpp.o: ../src/score.cpp
+CMakeFiles/graphics_asgn1.dir/src/score.cpp.o: ../src/score.h
 
 CMakeFiles/graphics_asgn1.dir/src/semi.cpp.o: ../src/main.h
 CMakeFiles/graphics_asgn1.dir/src/semi.cpp.o: ../src/semi.cpp

@@ -8,14 +8,26 @@ CMakeFiles/graphics_asgn1.dir/src/ball.cpp.o
 CMakeFiles/graphics_asgn1.dir/src/color.cpp.o
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/color.cpp
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+CMakeFiles/graphics_asgn1.dir/src/digit.cpp.o
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/digit.cpp
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/digit.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
 CMakeFiles/graphics_asgn1.dir/src/input.cpp.o
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/input.cpp
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+CMakeFiles/graphics_asgn1.dir/src/line.cpp.o
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.cpp
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
 CMakeFiles/graphics_asgn1.dir/src/main.cpp.o
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/ball.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/digit.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.h
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.cpp
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/rectangle.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/score.h
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/semi.h
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/timer.h
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/triangle.h
@@ -29,6 +41,12 @@ CMakeFiles/graphics_asgn1.dir/src/rectangle.cpp.o
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/rectangle.cpp
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/rectangle.h
+CMakeFiles/graphics_asgn1.dir/src/score.cpp.o
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/digit.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/line.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/score.cpp
+ /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/score.h
 CMakeFiles/graphics_asgn1.dir/src/semi.cpp.o
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/main.h
  /home/kanav/sem-4/Graphics/Assignment2/graphics-boilerplate/src/semi.cpp

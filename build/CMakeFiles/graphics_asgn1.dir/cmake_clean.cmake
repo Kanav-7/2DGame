@@ -1,5 +1,8 @@
 file(REMOVE_RECURSE
   "CMakeFiles/graphics_asgn1.dir/src/timer.cpp.o"
+  "CMakeFiles/graphics_asgn1.dir/src/digit.cpp.o"
+  "CMakeFiles/graphics_asgn1.dir/src/line.cpp.o"
+  "CMakeFiles/graphics_asgn1.dir/src/score.cpp.o"
   "CMakeFiles/graphics_asgn1.dir/src/main.cpp.o"
   "CMakeFiles/graphics_asgn1.dir/src/semi.cpp.o"
   "CMakeFiles/graphics_asgn1.dir/src/triangle.cpp.o"
