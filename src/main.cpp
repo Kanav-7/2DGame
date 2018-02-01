@@ -39,13 +39,13 @@ Rectangle flore;
 Rectangle tramp;
 Semi tramp_curve;
 Rectangle slopes;
-int num = 5,numslopes = 2;
+int num = 8,numslopes = 3;
 float screen_zoom = 1, screen_center_x = 0, screen_center_y = 0;
 extern double drag_oldx, drag_oldy;
-int count = 0,spike_count=0;
+int count = 0,spike_count=0,spike_flag=1;
+char outsc[1000000];
 
-
-
+//glfwindowsettitle
 Timer t60(1.0 / 60);
 
 /* Render the scene with openGL */
@@ -230,7 +230,6 @@ void tick_input(GLFWwindow *window) {
 void tick_elements()
 {
 //    cout << player_state << endl;
-//    cout << player.speedx << endl;
 
     count++;
     if(spikes[0].position.x > 90)
@@ -241,7 +240,7 @@ void tick_elements()
         spikes[0].set_position(spikes_x,spikes_y);
         spikes[1].set_position(spikes_x - spikes_dist,spikes_y);
         spikes[2].set_position(spikes_x-2*spikes_dist,spikes_y);
-
+        spike_flag = 1;
     }
     if(count == 400)
     {
@@ -254,7 +253,6 @@ void tick_elements()
     }
 
     player.tick();
-//    cout << score << endl;
     if(magnet_present && player.position.y < 2.7 && player.position.y > 1.3)
             player.set_speed(player.speedx+0.001,player.speedy);
 
@@ -282,7 +280,8 @@ void tick_elements()
         spikes[1].set_position(100,100);
         spikes[2].set_position(100,100);
         spike_count = 0;
-//        score-=30;
+        spike_flag = 0;
+        score-=30;
     }
     if(detect_collision_tramp(player.bounding_box(),tramp.bounding_box()))
     {
@@ -342,7 +341,7 @@ void tick_elements()
         if(i < numslopes && player.speedy > 0 && detect_slope_collision(player.bounding_box(),slope[i].bounding_box(),slope[i].rotation))
         {
 //             player.set_speed(-player.speedx,-player.speedy - 0.005f);
-            cout << "YO" << i << endl;
+//            cout << "YO" << i << endl;
             float v = 0.05f;
             float a = slope[i].rotation;
 
@@ -355,7 +354,7 @@ void tick_elements()
 
              ball[i].set_position(xy,vary);
              ball[i].set_speed(-vely,0);
-
+             score+=ball[i].score;
              if(i<numslopes)
              {
                  float ang = slope[i].rotation;
@@ -375,7 +374,7 @@ void tick_elements()
 
              ball[i].set_position(xy,vary);
              ball[i].set_speed(-vely,0);
-
+             score+=ball[i].score;
              if(i<numslopes)
              {
                  slope[i].set_position(xy-ball[i].radius*cos((3*M_PI)/4),vary+ball[i].radius*sin((3*M_PI)/4));
@@ -404,6 +403,9 @@ void tick_elements()
         }
     }
 
+    sprintf(outsc,"Current Score: %d", score);
+    glfwSetWindowTitle(window,outsc);
+
     }
 
 /* Initialize the OpenGL rendering properties */
@@ -416,7 +418,7 @@ void initGL(GLFWwindow *window, int width, int height) {
     magnetout = Semi(-4,2,0.4,90,COLOR_BACKGROUND);
     pool = Semi(pool_x,pool_y,pool_radius,180,COLOR_BLUE);
 
-    player = Ball(player_x,player_y,player_radius,0,0,COLOR_GREEN);
+    player = Ball(player_x,player_y,player_radius,0,0,0,COLOR_GREEN);
 
     tramp = Rectangle(tramp_x,tramp_y,tramp_w,tramp_h,0,0,COLOR_RED);
     tramp_curve = Semi(tramp_x,tramp_y + tramp_h/2.0f,tramp_h - 0.1f,180,COLOR_YELLOW);
@@ -432,7 +434,20 @@ void initGL(GLFWwindow *window, int width, int height) {
         float vely = random(ball_vel_start,ball_vel_end);
         float rady = random(ball_rad_start,ball_rad_end);
         float xy = random(ball_x_start,ball_x_end);
-        ball[i] = Ball(xy,vary,rady, -vely ,0, (rand()%2)?(COLOR_RED):(COLOR_YELLOW));
+        float sc;
+        color_t cl;
+        if(rand()%2)
+        {
+            cl = COLOR_RED;
+            sc = 10;
+        }
+        else
+        {
+            cl = COLOR_YELLOW;
+            sc = 20;
+        }
+
+        ball[i] = Ball(xy,vary,rady, -vely ,0,sc,cl);
 
         if(i < numslopes)
         {
@@ -533,7 +548,7 @@ bool detect_pool_surface(bounding_box_t a,bounding_box_t pool)
 
 bool detect_spikes_surface(bounding_box_t a)
 {
-    return ((a.x < spikes_x + spikes_dist/2.0f)&&(a.x > spikes_x - 5*(spikes_dist/2.0f))&&(a.y < 0.4f - 2.0f + a.r ));
+    return (spike_flag && (a.x < spikes_x + spikes_dist/2.0f)&&(a.x > spikes_x - 5*(spikes_dist/2.0f))&&(a.y < 0.4f - 2.0f + a.r ));
 }
 
 bool detect_slope_collision (bounding_box_t a,bounding_box_r b,float ang)

@@ -7,12 +7,13 @@
 class Ball {
 public:
     Ball() {}
-    Ball(float x, float y,float r,double vx,double vy, color_t color);
+    Ball(float x, float y,float r,double vx,double vy, double s,color_t color);
     glm::   vec3 position;
     float rotation;
     float radius;
     double speedx;
     double speedy;
+    double score;
     color_t col;
     void draw(glm::mat4 VP);
     void set_position(float x, float y);

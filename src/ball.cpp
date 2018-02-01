@@ -1,13 +1,14 @@
 #include "ball.h"
 #include "main.h"
 
-Ball::Ball(float x, float y, float r,double vx,double vy,color_t color) {
+Ball::Ball(float x, float y, float r,double vx,double vy,double s,color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->radius = r;
     this->rotation = 0;
     this->speedx = vx;
     this->speedy = vy;
     this->col = color;
+    this->score = s;
     int n = 360;
     static GLfloat vertex_buffer_data[360*9];
     float pi = M_PI*2;
