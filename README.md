@@ -1,7 +1,7 @@
 Graphics Assignment 1
 =====================
 
-#Kanav Gupta - 20161151
+# Kanav Gupta - 20161151
 
 2-D Game (Pacman Killer) made using openGL3 (C++).
 
