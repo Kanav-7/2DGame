@@ -7,7 +7,7 @@
 class Ball {
 public:
     Ball() {}
-    Ball(float x, float y,float r,double vx,double vy, double s,color_t color);
+    Ball(float x, float y,float r,double vx,double vy, double s,color_t color,int flag);
     glm::   vec3 position;
     float rotation;
     float radius;

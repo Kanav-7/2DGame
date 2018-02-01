@@ -4,6 +4,7 @@
 #include "rectangle.h"
 #include "semi.h"
 #include "triangle.h"
+#include "score.h"
 
 using namespace std;
 
@@ -21,6 +22,7 @@ Semi magnetin,magnetout;
 Ball  ball[100000];
 Rectangle slope[1000];
 Ball player;
+Score points;
 int player_state = 0,in_water = 0;
 double acc = 0.002f, upspeed = -0.15f,waterspeed = -0.1f;
 float ball_rad_start = 0.2f, ball_rad_end = 0.6f;
@@ -107,6 +109,7 @@ void draw() {
     spikes[1].draw(VP);
     spikes[2].draw(VP);
     player.draw(VP);
+    points.draw(VP);
 
 }
 
@@ -132,6 +135,7 @@ void tick_input(GLFWwindow *window) {
 //            screen_center_x+=0.05;
 //            reset_screen();
 //        }
+        player.rotation-=3;
         if(in_water && detect_collision_floor(player.bounding_box(),flore.bounding_box(),pool.bounding_box()))
         {
             if(player.position.x + 0.03f <= -player.radius + pool.radius)
@@ -154,6 +158,7 @@ void tick_input(GLFWwindow *window) {
     }
     if (A_left && player.position.x > player_radius - 5)
     {
+        player.rotation+=3;
 //        if( player.position.x <= player_radius - 5){
 //            screen_center_x-=0.1;
 //            reset_screen();
@@ -282,6 +287,8 @@ void tick_elements()
         spike_count = 0;
         spike_flag = 0;
         score-=30;
+        points.subtract(30);
+
     }
     if(detect_collision_tramp(player.bounding_box(),tramp.bounding_box()))
     {
@@ -355,6 +362,8 @@ void tick_elements()
              ball[i].set_position(xy,vary);
              ball[i].set_speed(-vely,0);
              score+=ball[i].score;
+             points.add((int) ball[i].score);
+
              if(i<numslopes)
              {
                  float ang = slope[i].rotation;
@@ -375,6 +384,7 @@ void tick_elements()
              ball[i].set_position(xy,vary);
              ball[i].set_speed(-vely,0);
              score+=ball[i].score;
+             points.add((int) ball[i].score);
              if(i<numslopes)
              {
                  slope[i].set_position(xy-ball[i].radius*cos((3*M_PI)/4),vary+ball[i].radius*sin((3*M_PI)/4));
@@ -403,8 +413,6 @@ void tick_elements()
         }
     }
 
-    sprintf(outsc,"Current Score: %d", score);
-    glfwSetWindowTitle(window,outsc);
 
     }
 
@@ -418,15 +426,15 @@ void initGL(GLFWwindow *window, int width, int height) {
     magnetout = Semi(-4,2,0.4,90,COLOR_BACKGROUND);
     pool = Semi(pool_x,pool_y,pool_radius,180,COLOR_BLUE);
 
-    player = Ball(player_x,player_y,player_radius,0,0,0,COLOR_GREEN);
+    player = Ball(player_x,player_y,player_radius,0,0,0,COLOR_GREEN,1);
 
     tramp = Rectangle(tramp_x,tramp_y,tramp_w,tramp_h,0,0,COLOR_RED);
     tramp_curve = Semi(tramp_x,tramp_y + tramp_h/2.0f,tramp_h - 0.1f,180,COLOR_YELLOW);
     flore = Rectangle(0,-3.5,100,3,0,0,COLOR_BROWN);
 
-    spikes[0] = Triangle(spikes_x,spikes_y,COLOR_YELLOW);
-    spikes[1] = Triangle(spikes_x - spikes_dist,spikes_y,COLOR_YELLOW);
-    spikes[2] = Triangle(spikes_x-2*spikes_dist,spikes_y,COLOR_YELLOW);
+    spikes[0] = Triangle(spikes_x,spikes_y,ICOLOR_VIOLET);
+    spikes[1] = Triangle(spikes_x - spikes_dist,spikes_y,ICOLOR_VIOLET);
+    spikes[2] = Triangle(spikes_x-2*spikes_dist,spikes_y,ICOLOR_VIOLET);
 
     for(int i=0;i<num;i++)
     {
@@ -447,7 +455,7 @@ void initGL(GLFWwindow *window, int width, int height) {
             sc = 20;
         }
 
-        ball[i] = Ball(xy,vary,rady, -vely ,0,sc,cl);
+        ball[i] = Ball(xy,vary,rady, -vely ,0,sc,cl,0 );
 
         if(i < numslopes)
         {
@@ -486,8 +494,10 @@ int main(int argc, char **argv) {
 
     window = initGLFW(width, height);
 
+    sprintf(outsc,"Pacman Killer Game");
+    glfwSetWindowTitle(window,outsc);
     initGL (window, width, height);
-
+    points.update(0);
     /* Draw in loop */
     while (!glfwWindowShouldClose(window)) {
         // Process timers

@@ -26,6 +26,7 @@ GLuint     LoadShaders(const char *vertex_file_path, const char *fragment_file_p
 struct VAO *create3DObject(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, const GLfloat *color_buffer_data, GLenum fill_mode = GL_FILL);
 struct VAO *create3DObject(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, const GLfloat red, const GLfloat green, const GLfloat blue, GLenum fill_mode = GL_FILL);
 struct VAO *create3DObject(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, const color_t color, GLenum fill_mode = GL_FILL);
+struct VAO *create3DObject(GLenum primitive_mode, int numVertices, const GLfloat *vertex_buffer_data, const color_t *color, GLenum fill_mode, int tot);
 void       draw3DObject(struct VAO *vao);
 
 // input.cpp
@@ -100,4 +101,12 @@ extern const color_t COLOR_BLUE;
 extern const color_t COLOR_YELLOW;
 extern const color_t COLOR_BROWN;
 
+
+extern const color_t ICOLOR_VIOLET ;
+extern const color_t ICOLOR_INDIGO;
+extern const color_t ICOLOR_BLUE ;
+extern const color_t ICOLOR_GREEN ;
+extern const color_t ICOLOR_YELLOW ;
+extern const color_t ICOLOR_ORANGE;
+extern const color_t ICOLOR_RED;
 #endif
