@@ -25,7 +25,7 @@ Graphics Assignment 1
 - Colourful background
 - Different Score on colliding with different colored balls.
 - Real physics used in pool, collisions, fall etc.
-- Score
+- Score displayed on top panel.
 - Zooming/panning using both mouse/Keyboard.
 - Player movement using mouse.
 
