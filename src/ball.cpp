@@ -1,7 +1,7 @@
 #include "ball.h"
 #include "main.h"
 
-Ball::Ball(float x, float y, float r,double vx,double vy,double s,color_t color,int flag) {
+Ball::Ball(float x, float y, float r,double vx,double vy,double s,color_t color) {
     this->position = glm::vec3(x, y, 0);
     this->radius = r;
     this->rotation = 0;
@@ -30,12 +30,7 @@ Ball::Ball(float x, float y, float r,double vx,double vy,double s,color_t color,
         vertex_buffer_data[i++] = 0.0f;
         xs=x1,ys=y1;
     }
-    if(flag)
-    {
-        color_t colors[7]={ICOLOR_VIOLET,ICOLOR_INDIGO,ICOLOR_BLUE,ICOLOR_GREEN,ICOLOR_YELLOW,ICOLOR_ORANGE,ICOLOR_RED};
-        this->object =  create3DObject(GL_TRIANGLES, 1080, vertex_buffer_data, colors, GL_FILL,7);
-    }
-    else
+
         this->object = create3DObject(GL_TRIANGLES, 3*n, vertex_buffer_data, color, GL_FILL);
 }
 
