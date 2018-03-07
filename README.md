@@ -18,7 +18,7 @@ Graphics Assignment 1
 
 - ​Colliding with porcupine : -30 Points
 - Colliding with **RED** ball : +10 Points.
-- Colliding with **YELLOW** ball : +30 Points.
+- Colliding with **YELLOW** ball : +40 Points.
 
 ### Extra features
 
